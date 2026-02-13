@@ -1,0 +1,480 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}首页{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero Slider */
+    .hero-section {
+        height: 800px;
+        position: relative;
+        overflow: hidden;
+        margin-top: 160px;
+    }
+
+    .slider-container {
+        height: 100%;
+        display: flex;
+        transition: transform 1s cubic-bezier(0.7, 0, 0.3, 1);
+    }
+
+    .slide {
+        min-width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .slide::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .slide-content {
+        position: relative;
+        z-index: 2;
+        color: white;
+        text-align: center;
+        animation: slideUp 1.2s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* About Section - Premium Artistic Redesign */
+    .about-section {
+        padding: 120px 0;
+        background: #fff;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .about-section::before {
+        content: 'ZUNSHENG';
+        position: absolute;
+        top: 20px;
+        right: -50px;
+        font-size: 180px;
+        font-weight: 900;
+        color: rgba(0, 51, 153, 0.03);
+        z-index: 0;
+        letter-spacing: 20px;
+    }
+
+    .section-header {
+        text-align: left;
+        /* 改为左对齐，更有高级感 */
+        margin-bottom: 60px;
+        position: relative;
+    }
+
+    .section-title {
+        font-size: 48px;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin-bottom: 5px;
+        border-bottom: none;
+        padding-bottom: 0;
+        letter-spacing: 2px;
+        background: linear-gradient(to right, var(--primary-color), #0056cc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle-en {
+        font-size: 14px;
+        color: #999;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        margin-top: 10px;
+        display: block;
+    }
+
+    .section-header::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: var(--primary-color);
+        border-radius: 2px;
+    }
+
+    .about-flex {
+        display: flex;
+        gap: 80px;
+        align-items: stretch;
+        /* 使左右高度一致 */
+        margin-top: 60px;
+    }
+
+    .about-image {
+        flex: 1;
+        position: relative;
+        z-index: 1;
+    }
+
+    .about-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: none;
+        padding: 0;
+        box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+    }
+
+    .about-text {
+        flex: 1.2;
+        padding: 20px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .about-text h3 {
+        font-size: 32px;
+        color: #1a1a1a;
+        margin-bottom: 30px;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    .about-text p {
+        font-size: 18px;
+        /* 字号加大 */
+        color: #444;
+        line-height: 1.9;
+        /* 行间距加大 */
+        text-align: justify;
+        position: relative;
+    }
+
+    .more-btn {
+        display: inline-block;
+        margin-top: 40px;
+        padding: 15px 45px;
+        background: var(--primary-color);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border: none;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border-radius: 2px;
+        box-shadow: 0 10px 20px rgba(0, 51, 153, 0.15);
+    }
+
+    .more-btn:hover {
+        background: #002266;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 51, 153, 0.25);
+        color: #fff;
+    }
+
+    /* News Section */
+    .news-section {
+        padding: 80px 0;
+        background: #fdfdfd;
+    }
+
+    .news-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+
+    .news-item {
+        background: white;
+        padding: 20px;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .news-item:hover {
+        border-bottom-color: #003399;
+        transform: translateY(-5px);
+    }
+
+    .news-date {
+        color: #999;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    /* Product Section */
+    .product-section {
+        padding: 80px 0;
+        overflow: hidden;
+        /* 防止轮播溢出 */
+    }
+
+    .product-slider-wrapper {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        padding: 20px 0;
+    }
+
+    .product-track {
+        display: flex;
+        gap: 20px;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+    }
+
+    .product-card {
+        flex: 0 0 calc(25% - 15px);
+        /* 每排显示4个，减去间距 */
+        text-align: center;
+        padding: 15px;
+        border: 1px solid #eee;
+        background: #fff;
+        transition: all 0.3s;
+        box-sizing: border-box;
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 992px) {
+        .product-card {
+            flex: 0 0 calc(33.33% - 14px);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .product-card {
+            flex: 0 0 calc(50% - 10px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .product-card {
+            flex: 0 0 100%;
+        }
+    }
+
+    .product-card:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+    }
+
+    .product-img {
+        width: 100%;
+        height: 180px;
+        background: #ffffff;
+        object-fit: contain;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Slider -->
+<section class="hero-section">
+    <div class="slider-container" id="heroSlider">
+        {% if hero_slides %}
+        {% for slide in hero_slides %}
+        <div class="slide" style="background-image: url('{{ slide.image.url }}');">
+            <div class="slide-content">
+                <h1>{{ slide.title }}</h1>
+                <p>{{ slide.subtitle }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="slide" style="background-image: url('{% static 'images/banner1.jpg' %}');">
+            <div class="slide-content">
+                <h1>立足品质 做好服务</h1>
+                <p>遵盛汽车零部件有限公司</p>
+            </div>
+        </div>
+        <div class="slide" style="background-image: url('{% static 'images/banner2.jpg' %}');">
+            <div class="slide-content">
+                <h1>创新驱动 智造未来</h1>
+                <p>专业的汽配制造方案提供商</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">遵盛简介</h2>
+            <p>ZUNSHENG PROFILE</p>
+        </div>
+        <div class="about-flex">
+            <div class="about-image">
+                <img src="{% if company.image and company.image.name %}{{ company.image.url }}{% else %}{% static 'images/company_image.jpg' %}{% endif %}" alt="遵盛公司">
+            </div>
+            <div class="about-text">
+                <h3>{{ company.name|default:"遵盛汽车零部件有限公司" }}</h3>
+                <p>{{ company.description|default:"遵盛汽车零部件有限公司专注于生产和开发雨刮电机、雨刮连杆总成等四大产品系列。公司拥有先进的技术研发能力和完善的质量管理体系，致力于提供高性价比的产品和服务..."|truncatechars:300 }}</p>
+                <a href="{% url 'website:about' %}" class="more-btn">MORE+</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- News Section -->
+<section class="news-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">新闻中心</h2>
+            <p>NEWS CENTER</p>
+        </div>
+        <div class="news-grid">
+            {% for news in news_list %}
+            <div class="news-item">
+                <div class="news-date">{{ news.created_at|date:"Y-m-d" }}</div>
+                <h3>{{ news.title }}</h3>
+                <p>{{ news.summary|truncatechars:100 }}</p>
+            </div>
+            {% empty %}
+            <div class="news-item">
+                <div class="news-date">2026-02-12</div>
+                <h3>公司新生产线正式投产</h3>
+                <p>为了进一步提升产能，公司引进了全新的自动化生产设备...</p>
+            </div>
+            <div class="news-item">
+                <div class="news-date">2026-02-10</div>
+                <h3>参加国际汽配展会取得圆满成功</h3>
+                <p>遵盛汽配在本次展会上展示了最新研发的雨刮连杆总成...</p>
+            </div>
+            <div class="news-item">
+                <div class="news-date">2026-02-05</div>
+                <h3>坚持质量第一，打造品牌信心</h3>
+                <p>质量是企业的生命线，遵盛始终坚持严格的品控流程...</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Product Section -->
+<section class="product-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">产品中心</h2>
+            <p>PRODUCT CENTER</p>
+        </div>
+        <div class="product-slider-wrapper">
+            <div class="product-track" id="productTrack">
+                {% for product in products %}
+                <div class="product-card">
+                    <a href="{% url 'website:product_detail' product.pk %}" style="text-decoration: none; color: inherit;">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="product-img" alt="{{ product.name }}">
+                        {% else %}
+                        <div class="product-img" style="display:flex;align-items:center;justify-content:center;color:#ccc;">NO IMAGE</div>
+                        {% endif %}
+                        <p style="margin-top: 15px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ product.name }}</p>
+                    </a>
+                </div>
+                {% empty %}
+                <!-- 占位内容保持美观 -->
+                <div class="product-card">
+                    <div class="product-img" style="background:#f9f9f9;"></div>
+                    <p>LD096SM</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-img" style="background:#f9f9f9;"></div>
+                    <p>LD091SM</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-img" style="background:#f9f9f9;"></div>
+                    <p>LD086SM</p>
+                </div>
+                <div class="product-card">
+                    <div class="product-img" style="background:#f9f9f9;"></div>
+                    <p>LD069SM</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; color: #666; font-size: 15px;">
+            <p>更多型号及规格，欢迎联系我们咨询。公司具备强劲研发实力，支持<span style="color: #003399; font-weight: 600;">来图来样定制化开发与生产</span>！</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Simple Slider Script
+    (function () {
+        let currentSlide = 0;
+        const sliderContainer = document.getElementById('heroSlider');
+        if (!sliderContainer) return;
+        const totalSlides = sliderContainer.children.length;
+        if (totalSlides <= 1) return;
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        setInterval(nextSlide, 5000); // 5 seconds interval
+    })();
+
+    // Product Carousel Script
+    (function () {
+        const track = document.getElementById('productTrack');
+        if (!track) return;
+
+        let index = 0;
+        const cards = track.querySelectorAll('.product-card');
+        const cardCount = cards.length;
+        if (cardCount <= 4) return; // 图片不够4个不轮播
+
+        function scrollProducts() {
+            const cardWidth = cards[0].offsetWidth + 20; // width + gap
+            index++;
+
+            if (index > cardCount - 4) {
+                index = 0; // 重置到开始
+            }
+
+            track.style.transform = `translateX(-${index * cardWidth}px)`;
+        }
+
+        // 自动播放
+        let autoPlay = setInterval(scrollProducts, 3000);
+
+        // 鼠标悬停停止播放
+        track.addEventListener('mouseenter', () => clearInterval(autoPlay));
+        track.addEventListener('mouseleave', () => autoPlay = setInterval(scrollProducts, 3000));
+
+        // 窗口大小改变时重置布局
+        window.addEventListener('resize', () => {
+            index = 0;
+            track.style.transform = 'translateX(0)';
+        });
+    })();
+</script>
+{% endblock %}

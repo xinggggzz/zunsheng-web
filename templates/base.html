@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - {{ company.name|default:"遵盛汽车零部件有限公司" }}</title>
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <header class="site-header">
+        <!-- Top Row: Logo + Icons -->
+        <div class="header-top">
+            <div class="logo">
+                <a href="{% url 'website:index' %}">
+                    <span class="logo-text-en">ZUNSHENG</span>
+                    <span class="logo-text-cn">遵盛汽车零部件</span>
+                </a>
+            </div>
+
+            <div class="header-right-area">
+                <div class="header-icons">
+                    <div class="header-icon-item">
+                        <div class="icon-circle">
+                            <i class="fa-solid fa-gem"></i>
+                        </div>
+                        <span>立足品质</span>
+                    </div>
+                    <div class="header-icon-item">
+                        <div class="icon-circle">
+                            <i class="fa-solid fa-handshake"></i>
+                        </div>
+                        <span>做好服务</span>
+                    </div>
+                </div>
+
+                <div class="lang-btn-box">
+                    <div class="lang-circle">En</div>
+                    <span>英文站</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Navigation -->
+        <div class="header-bottom">
+            <nav class="main-nav">
+                <ul>
+                    <li class="nav-item {% if request.resolver_match.view_name == 'website:index' %}active{% endif %}">
+                        <a href="{% url 'website:index' %}">网站首页</a>
+                    </li>
+                    <li class="nav-item nav-item-dropdown {% if 'about' in request.path or 'equipment' in request.path or 'environment' in request.path %}active{% endif %}">
+                        <a href="{% url 'website:about' %}">关于遵盛</a>
+                        <div class="dropdown-menu">
+                            <a href="{% url 'website:about' %}" class="dropdown-item">遵盛简介</a>
+                            <a href="{% url 'website:equipment' %}" class="dropdown-item">技术设备</a>
+                            <a href="{% url 'website:environment' %}" class="dropdown-item">公司环境</a>
+                        </div>
+                    </li>
+                    <li class="nav-item {% if 'news' in request.path %}active{% endif %}">
+                        <a href="{% url 'website:news_list' %}">新闻中心</a>
+                    </li>
+                    <li class="nav-item {% if 'product' in request.path %}active{% endif %}">
+                        <a href="{% url 'website:product_list' %}">产品中心</a>
+                    </li>
+                    <li class="nav-item nav-item-dropdown {% if 'service' in request.path or 'contact' in request.path and 'news' not in request.path and 'product' not in request.path and 'about' not in request.path and 'equipment' not in request.path and 'environment' not in request.path and request.resolver_match.view_name != 'website:index' %}active{% endif %}">
+                        <a href="#">客户服务</a>
+                        <div class="dropdown-menu">
+                            <a href="{% url 'website:service_philosophy' %}" class="dropdown-item">服务理念</a>
+                            <a href="{% url 'website:contact' %}" class="dropdown-item">客户留言</a>
+                            <a href="{% url 'website:about' %}" class="dropdown-item">遵盛证书</a>
+                        </div>
+                    </li>
+                    <li class="nav-item {% if request.resolver_match.view_name == 'website:contact' %}active{% endif %}">
+                        <a href="{% url 'website:contact' %}">联系我们</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="floating-sidebar">
+        <div class="sidebar-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>服务热线</span>
+            <div class="sidebar-popover">13967720359</div>
+        </div>
+        <a href="{% url 'website:contact' %}" class="sidebar-item">
+            <i class="fa-solid fa-comment-dots"></i>
+            <span>客户留言</span>
+        </a>
+        <div class="sidebar-item">
+            <i class="fa-brands fa-weixin"></i>
+            <span>微信</span>
+            <div class="sidebar-popover-qr">
+                {% if company.wechat_qr %}
+                <img src="{{ company.wechat_qr.url }}" alt="微信二维码">
+                {% else %}
+                <img src="{% static 'images/qr-wechat.png' %}" alt="微信二维码">
+                {% endif %}
+                <p>扫码咨询</p>
+            </div>
+        </div>
+        <div class="sidebar-item" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <i class="fa-solid fa-chevron-up"></i>
+            <span>TOP</span>
+        </div>
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-info">
+                    <div class="footer-logo">
+                        <span class="logo-en">ZUNSHENG</span>
+                        <span class="logo-cn">遵盛汽配</span>
+                    </div>
+                    <div class="footer-contact">
+                        <p><i class="fa-solid fa-phone"></i> 电话：{{ company.phone|default:"13967720359" }}</p>
+                        <p><i class="fa-solid fa-envelope"></i> 邮箱：{{ company.email|default:"1987205417@qq.com" }}</p>
+                        <p><i class="fa-solid fa-location-dot"></i> 地址：{{ company.address|default:"浙江省温州市瑞安市塘下镇石岗村新兴西街50号" }}</p>
+                        <p><i class="fa-solid fa-qrcode"></i> 邮编：{{ company.postcode|default:"325200" }}</p>
+                    </div>
+                </div>
+                <div class="footer-qr-wrap">
+                    <div class="qr-item">
+                        <img src="{% static 'images/catalog_qr.png' %}" alt="产品图册">
+                        <div class="qr-label">产品图册(点我下载)</div>
+                        {% if company.pdf_catalog %}
+                        <a href="{{ company.pdf_catalog.url }}" target="_blank" style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0;">下载</a>
+                        {% else %}
+                        <a href="#" style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0;">下载</a>
+                        {% endif %}
+                    </div>
+                    <div class="qr-item">
+                        {% if company.wechat_qr %}
+                        <img src="{{ company.wechat_qr.url }}" alt="联系微信">
+                        {% else %}
+                        <img src="{% static 'images/qr-wechat.png' %}" alt="联系微信">
+                        {% endif %}
+                        <div class="qr-label">联系微信</div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Copyright © 2026 {{ company.name|default:"遵盛汽车零部件有限公司" }} Powered by 遵盛团队</p>
+                <p>ICP备00000000号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

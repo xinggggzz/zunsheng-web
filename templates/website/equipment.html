@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}技术设备{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --banner-height: 350px;
+        --nav-height: 160px;
+    }
+
+    .inner-banner {
+        height: var(--banner-height);
+        position: relative;
+        margin-top: var(--nav-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: transparent;
+        overflow: hidden;
+    }
+
+    .banner-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .banner-title {
+        font-size: 42px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        color: #003399;
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+    }
+
+    .banner-subtitle {
+        font-size: 18px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        opacity: 0;
+        color: #666;
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes scaleInVisible {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 51, 153, 0.4);
+        z-index: 1;
+        display: none;
+    }
+
+    .content-section {
+        padding: 100px 0;
+        background: #fff;
+    }
+
+    .about-header {
+        text-align: center;
+        margin-bottom: 70px;
+        position: relative;
+    }
+
+    .about-header h2 {
+        font-size: 36px;
+        color: #000;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .about-header .sub-title {
+        font-size: 20px;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    .about-header::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: #003399;
+        margin: 25px auto 0;
+        border-radius: 2px;
+    }
+
+    .equipment-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-top: 50px;
+    }
+
+    .equipment-item {
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        transition: all 0.4s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #eee;
+    }
+
+    .equipment-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 51, 153, 0.1);
+        border-color: #003399;
+    }
+
+    .equipment-img-box {
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fcfcfc;
+    }
+
+    .equipment-img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+
+    .equipment-item:hover .equipment-img-box img {
+        transform: scale(1.05);
+    }
+
+    .equipment-name {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        padding: 10px 0;
+    }
+
+    @media (max-width: 992px) {
+        .equipment-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .equipment-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if company.about_banner and company.about_banner.name %}
+<style>
+    .inner-banner {
+        background-image: url('{{ company.about_banner.url }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .banner-overlay {
+        display: block;
+    }
+
+    .banner-title,
+    .banner-subtitle {
+        color: white !important;
+    }
+</style>
+{% endif %}
+
+<!-- Inner Banner -->
+<section class="inner-banner">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+        <h1 class="banner-title">{{ slogan_cn }}</h1>
+        <p class="banner-subtitle">{{ slogan_en }}</p>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="content-section">
+    <div class="container">
+        <div class="about-header">
+            <h2>技术设备</h2>
+            <p class="sub-title">TECHNICAL EQUIPMENT</p>
+        </div>
+
+        <div class="equipment-grid">
+            {% for item in equipment %}
+            <div class="equipment-item">
+                <div class="equipment-img-box">
+                    {% if item.image and item.image.name %}
+                    <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                    {% else %}
+                    <div
+                        style="width:100%; height:100%; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#ccc;">
+                        NO IMAGE</div>
+                    {% endif %}
+                </div>
+                <div class="equipment-name">{{ item.name }}</div>
+            </div>
+            {% empty %}
+            <div style="text-align: center; grid-column: 1/-1; padding: 50px 0;">
+                <i class="fa-solid fa-microchip"
+                    style="font-size: 64px; color: #eee; margin-bottom: 20px; display: block;"></i>
+                <p style="color: #999; font-size: 18px;">暂无技术设备展示</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

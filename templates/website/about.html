@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}关于遵盛{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --banner-height: 350px;
+        --nav-height: 160px;
+    }
+
+    .inner-banner {
+        height: var(--banner-height);
+        position: relative;
+        margin-top: var(--nav-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: transparent;
+        overflow: hidden;
+    }
+
+    .banner-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .banner-title {
+        font-size: 42px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        color: #003399;
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+    }
+
+    .banner-subtitle {
+        font-size: 18px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        opacity: 0;
+        color: #666;
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes scaleInVisible {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 51, 153, 0.4);
+        z-index: 1;
+        display: none;
+    }
+
+    .content-section {
+        padding: 120px 0;
+        background: #fff;
+    }
+
+    .about-header {
+        text-align: left;
+        margin-bottom: 80px;
+        border-left: 8px solid var(--primary-color);
+        padding-left: 30px;
+    }
+
+    .about-header h2 {
+        font-size: 56px;
+        color: #1a1a1a;
+        font-weight: 800;
+        margin-bottom: 0;
+        letter-spacing: -1px;
+    }
+
+    .about-header .sub-title {
+        font-size: 16px;
+        color: var(--primary-color);
+        text-transform: uppercase;
+        letter-spacing: 8px;
+        font-weight: 600;
+        display: block;
+        margin-top: 10px;
+    }
+
+    .about-header::after {
+        display: none;
+    }
+
+    .about-intro-wrap {
+        display: flex;
+        gap: 100px;
+        align-items: flex-start;
+    }
+
+    .intro-text {
+        flex: 1.4;
+        font-size: 20px;
+        color: #333;
+        line-height: 2.0;
+        text-align: justify;
+    }
+
+    /* 首字下沉效果 - 增加艺术感 */
+    .intro-text p:first-of-type::first-letter {
+        float: left;
+        font-size: 85px;
+        line-height: 1;
+        font-weight: 900;
+        margin-right: 15px;
+        margin-top: 5px;
+        color: var(--primary-color);
+        font-family: 'Arial Black', sans-serif;
+    }
+
+    .intro-text p {
+        margin-bottom: 40px;
+        position: relative;
+    }
+
+    /* 装饰性引号 */
+    .intro-text p:last-of-type::after {
+        content: '”';
+        position: absolute;
+        bottom: -50px;
+        right: 0;
+        font-size: 120px;
+        color: rgba(0, 51, 153, 0.05);
+        font-family: serif;
+    }
+
+    .intro-image {
+        flex: 1;
+        position: relative;
+        padding-top: 50px;
+    }
+
+    .intro-image img {
+        width: 100%;
+        border-radius: 4px;
+        box-shadow: 40px 40px 80px rgba(0, 0, 0, 0.15);
+        z-index: 2;
+        position: relative;
+    }
+
+    .image-decoration {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: #f0f4f8;
+        top: 0;
+        left: -40px;
+        z-index: 1;
+        border-radius: 4px;
+    }
+
+    .certificates-section {
+        padding: 80px 0;
+        background: #f9f9f9;
+        border-top: 1px solid #eee;
+    }
+
+    .certificates-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        margin-top: 50px;
+    }
+
+    .cert-item {
+        background: #fff;
+        padding: 15px;
+        border-radius: 4px;
+        transition: all 0.4s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .cert-item:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 51, 153, 0.1);
+    }
+
+    .cert-img-box {
+        width: 100%;
+        height: 280px;
+        overflow: hidden;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fcfcfc;
+    }
+
+    .cert-img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if company.about_banner and company.about_banner.name %}
+<style>
+    .inner-banner {
+        background-image: url('{{ company.about_banner.url }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .banner-overlay {
+        display: block;
+    }
+
+    .banner-title,
+    .banner-subtitle {
+        color: white !important;
+    }
+</style>
+{% endif %}
+
+<!-- Inner Banner -->
+<section class="inner-banner">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+        <h1 class="banner-title">{{ slogan_cn }}</h1>
+        <p class="banner-subtitle">{{ slogan_en }}</p>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="content-section">
+    <div class="container">
+        <div class="about-header">
+            <h2>遵盛简介</h2>
+            <p class="sub-title">ZUNSHENG PROFILE</p>
+        </div>
+
+        <div class="about-intro-wrap">
+            <div class="intro-text">
+                {% if company.description %}
+                {{ company.description|linebreaks }}
+                {% else %}
+                <p>遵盛汽车零部件有限公司是一家深耕汽车配件行业多年的专业化企业。我们始终坚持"立足质量、做好服务、不断进取"的核心价值理念，致力于为全球客户提供最高品质的汽车零部件。</p>
+                <p>公司拥有先进的生产设备和严苛的质量管理体系，确保每一件产品出厂即是精品。我们不断进行技术革新和产品升级，深受市场信任与赞誉。</p>
+                {% endif %}
+            </div>
+
+            <div class="intro-image">
+                {% if company.image and company.image.name %}
+                <img src="{{ company.image.url }}" alt="公司简介图">
+                {% else %}
+                <div style="width: 100%; height: 400px; background: #eee; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999;">
+                    <i class="fa-solid fa-industry" style="font-size: 64px; margin-bottom: 15px;"></i>
+                    <span>（等待上传工厂图片）</span>
+                </div>
+                {% endif %}
+                <div class="image-decoration"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Certificates Section -->
+<section class="certificates-section">
+    <div class="container">
+        <div class="about-header">
+            <h2>荣誉资质</h2>
+            <p class="sub-title">QUALIFICATION</p>
+        </div>
+
+        <div class="certificates-grid">
+            {% for cert in certificates %}
+            <div class="cert-item">
+                <div class="cert-img-box">
+                    {% if cert.image and cert.image.name %}
+                    <img src="{{ cert.image.url }}" alt="{{ cert.name }}">
+                    {% else %}
+                    <div style="width:100%; height:100%; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#ccc;">
+                        NO IMAGE</div>
+                    {% endif %}
+                </div>
+                <div style="text-align: center; font-weight: 500; color: #333;">{{ cert.name }}</div>
+            </div>
+            {% empty %}
+            <p style="text-align: center; grid-column: 1/-1; color: #999;">暂无证书展示</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}公司环境{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --banner-height: 350px;
+        --nav-height: 160px;
+    }
+
+    .inner-banner {
+        height: var(--banner-height);
+        position: relative;
+        margin-top: var(--nav-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: transparent;
+        overflow: hidden;
+    }
+
+    .banner-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .banner-title {
+        font-size: 42px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        color: #003399;
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+    }
+
+    .banner-subtitle {
+        font-size: 18px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        opacity: 0;
+        color: #666;
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes scaleInVisible {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 51, 153, 0.4);
+        z-index: 1;
+        display: none;
+    }
+
+    .content-section {
+        padding: 100px 0;
+        background: #fff;
+    }
+
+    .about-header {
+        text-align: center;
+        margin-bottom: 70px;
+        position: relative;
+    }
+
+    .about-header h2 {
+        font-size: 36px;
+        color: #000;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .about-header .sub-title {
+        font-size: 20px;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    .about-header::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: #003399;
+        margin: 25px auto 0;
+        border-radius: 2px;
+    }
+
+    .env-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+        margin-top: 50px;
+    }
+
+    .env-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        aspect-ratio: 16 / 10;
+    }
+
+    .env-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .env-item:hover img {
+        transform: scale(1.1);
+    }
+
+    .env-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 30px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        color: #fff;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        display: flex;
+        align-items: flex-end;
+    }
+
+    .env-item:hover .env-overlay {
+        opacity: 1;
+    }
+
+    .env-name {
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    @media (max-width: 768px) {
+        .env-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if company.about_banner and company.about_banner.name %}
+<style>
+    .inner-banner {
+        background-image: url('{{ company.about_banner.url }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .banner-overlay {
+        display: block;
+    }
+
+    .banner-title,
+    .banner-subtitle {
+        color: white !important;
+    }
+</style>
+{% endif %}
+
+<!-- Inner Banner -->
+<section class="inner-banner">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+        <h1 class="banner-title">{{ slogan_cn }}</h1>
+        <p class="banner-subtitle">{{ slogan_en }}</p>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="content-section">
+    <div class="container">
+        <div class="about-header">
+            <h2>公司环境</h2>
+            <p class="sub-title">COMPANY ENVIRONMENT</p>
+        </div>
+
+        <div class="env-grid">
+            {% for item in environment %}
+            <div class="env-item">
+                {% if item.image and item.image.name %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                {% else %}
+                <div
+                    style="width:100%; height:100%; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#ccc;">
+                    NO IMAGE</div>
+                {% endif %}
+                <div class="env-overlay">
+                    <div class="env-name">{{ item.name }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div style="text-align: center; grid-column: 1/-1; padding: 50px 0;">
+                <i class="fa-solid fa-tree-city"
+                    style="font-size: 64px; color: #eee; margin-bottom: 20px; display: block;"></i>
+                <p style="color: #999; font-size: 18px;">暂无公司环境展示</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

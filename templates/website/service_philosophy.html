@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}服务理念 - 遵盛汽车零部件有限公司{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --banner-height: 350px;
+        --nav-height: 160px;
+        --primary-blue: #003399;
+    }
+
+    /* Inner Banner Base Style */
+    .inner-banner {
+        height: var(--banner-height);
+        position: relative;
+        margin-top: var(--nav-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .banner-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .banner-title {
+        font-size: 42px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+        color: var(--primary-blue);
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+    }
+
+    .banner-subtitle {
+        font-size: 18px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        opacity: 0;
+        color: #666;
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes scaleInVisible {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 51, 153, 0.4);
+        z-index: 1;
+        display: none;
+    }
+
+    /* Main Section Style (Light Gray Background) */
+    .service-section {
+        padding: 80px 0 120px;
+        background: #f5f5f5;
+    }
+
+    /* Standard Site-Wide Header Section (Consistency) */
+    .about-header {
+        text-align: center;
+        margin-bottom: 70px;
+        position: relative;
+    }
+
+    .about-header h2 {
+        font-size: 36px;
+        color: #000;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .about-header .sub-title {
+        font-size: 20px;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    .about-header::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        background: #003399;
+        margin: 25px auto 0;
+        border-radius: 2px;
+    }
+
+    /* Content Area Layout */
+    .philosophy-container {
+        display: flex;
+        gap: 60px;
+        align-items: flex-start;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .philosophy-text-side {
+        flex: 1.4;
+        /* 增加文字区域宽度，让每行文字更长 */
+    }
+
+    .philosophy-image-side {
+        flex: 0.8;
+        /* 相对缩小图片区域宽度 */
+        position: sticky;
+        top: 200px;
+    }
+
+    .philosophy-image-side img {
+        width: 100%;
+        border-radius: 2px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    /* List Item Styling (Match Screenshot) */
+    .philosophy-item {
+        margin-bottom: 20px;
+        /* 减小每个条目之间的间距 */
+    }
+
+    .philosophy-item h3 {
+        font-size: 22px;
+        color: #0056cc;
+        font-weight: bold;
+        margin-bottom: 5px;
+        /* 减小标题与正文之间的间距 */
+        position: relative;
+    }
+
+    .philosophy-item:hover h3 {
+        color: var(--primary-blue);
+    }
+
+    .philosophy-item p {
+        font-size: 16px;
+        color: #666;
+        line-height: 1.6;
+        text-align: justify;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .philosophy-container {
+            flex-direction: column;
+        }
+
+        .philosophy-image-side {
+            position: static;
+            order: -1;
+            margin-bottom: 40px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if company.service_banner and company.service_banner.name %}
+<style>
+    .inner-banner {
+        background-image: url('{{ company.service_banner.url }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .banner-overlay {
+        display: block;
+    }
+
+    .banner-title,
+    .banner-subtitle {
+        color: white !important;
+    }
+</style>
+{% endif %}
+
+<!-- Inner Banner -->
+<section class="inner-banner">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+        <h1 class="banner-title">{{ slogan_cn }}</h1>
+        <p class="banner-subtitle">{{ slogan_en }}</p>
+    </div>
+</section>
+
+<!-- Content Section -->
+<section class="service-section">
+    <div class="container">
+        <!-- Standard Header area matching other pages -->
+        <div class="about-header">
+            <h2>服务理念</h2>
+            <div class="sub-title">Service</div>
+        </div>
+
+        <div class="philosophy-container">
+            <!-- Left Column: Text Items -->
+            <div class="philosophy-text-side">
+                <div class="philosophy-item">
+                    <h3>追求开拓</h3>
+                    <p>能为自己设定具有挑战性的工作目标并全力以赴，要求自己的工作表现达到高标准，并不断寻求突破。</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3>主动积极</h3>
+                    <p>不需他人指示或要求能自动自发做事，面临问题立即采取行动加以解决，且为达目标愿意主动承担额外责任。</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3>人脉建立</h3>
+                    <p>能主动寻求有利于工作的人际关系或联系网络，积极建立、有效管理，并合理维系彼此的长期合作关系。</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3>顾客服务</h3>
+                    <p>对顾客展现服务热忱，有效满足顾客需求、解决顾客问题，进而提高顾客满意度。</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3>顾客导向</h3>
+                    <p>计划和行动都能考虑到对顾客的影响，主动了解顾客需求并迅速响应，提供顾客所需信息，协助团队与顾客建立长期合作关系。</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3>压力承受</h3>
+                    <p>面临工作压力能够使用适当方法加以舒解，并维持应有的工作表现与人际关系。</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3>影响说服</h3>
+                    <p>能找出说服客户的关键点，依其特性及关心议题，运用适当方式使客户接受自己的意见或观点。</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3>沟通协调</h3>
+                    <p>能正视谈话对象，清楚且有条理地表达自己的意见与观点，确保客户专注地聆听和充分得了解你所说的话，并能在客户所传达的讯息中，正确解读和响应，以取得共识。</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3>销售技巧</h3>
+                    <p>销售时能把握顾客需求，运用适当的销售技巧，建立顾客对商品和服务的信心与认同。</p>
+                </div>
+            </div>
+
+            <!-- Right Column: Business Image -->
+            <div class="philosophy-image-side">
+                {% if company.image and company.image.name %}
+                <img src="{% static 'images/meeting_dummy.jpg' %}" onerror="this.src='{{ company.image.url }}'" alt="团队会议实景">
+                {% else %}
+                <div style="width: 100%; height: 450px; background: #fff; display: flex; align-items: center; justify-content: center; border: 1px solid #eee;">
+                    <span style="color: #ccc; font-size: 18px;">（会议/办公展示图片区域）</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
