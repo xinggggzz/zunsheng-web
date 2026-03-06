@@ -26,14 +26,25 @@ def index(request):
 def about(request):
     """关于遵盛 - 公司简介"""
     company = CompanyInfo.objects.first()
-    certificates = Certificate.objects.all()
     context = {
         'company': company,
-        'certificates': certificates,
         'slogan_cn': company.about_slogan_cn if company and company.about_slogan_cn else "造一流汽配产品，铸遵盛顶级品牌",
         'slogan_en': company.about_slogan_en if company and company.about_slogan_en else "MAKE FIRST-CLASS AUTO PARTS, CAST ZUNSHENG TOP BRAND",
     }
     return render(request, 'website/about.html', context)
+
+
+def certificates(request):
+    """荣誉资质"""
+    company = CompanyInfo.objects.first()
+    certificates_list = Certificate.objects.all()
+    context = {
+        'company': company,
+        'certificates': certificates_list,
+        'slogan_cn': "权威认证，品质见证我们的实力",
+        'slogan_en': "AUTHORITATIVE CERTIFICATION, WITNESS OUR STRENGTH",
+    }
+    return render(request, 'website/certificates.html', context)
 
 
 def technical_equipment(request):

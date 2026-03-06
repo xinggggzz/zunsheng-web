@@ -66,12 +66,12 @@
                     <li class="nav-item {% if 'product' in request.path %}active{% endif %}">
                         <a href="{% url 'website:product_list' %}">产品中心</a>
                     </li>
-                    <li class="nav-item nav-item-dropdown {% if 'service' in request.path or 'contact' in request.path and 'news' not in request.path and 'product' not in request.path and 'about' not in request.path and 'equipment' not in request.path and 'environment' not in request.path and request.resolver_match.view_name != 'website:index' %}active{% endif %}">
-                        <a href="#">客户服务</a>
+                    <li class="nav-item nav-item-dropdown {% if 'service' in request.path or 'certificates' in request.path %}active{% endif %}">
+                        <a href="{% url 'website:service_philosophy' %}">客户服务</a>
                         <div class="dropdown-menu">
                             <a href="{% url 'website:service_philosophy' %}" class="dropdown-item">服务理念</a>
-                            <a href="{% url 'website:contact' %}" class="dropdown-item">客户留言</a>
-                            <a href="{% url 'website:about' %}" class="dropdown-item">遵盛证书</a>
+                            <a href="{% url 'website:contact' %}#contact-form" class="dropdown-item">客户留言</a>
+                            <a href="{% url 'website:certificates' %}" class="dropdown-item">遵盛证书</a>
                         </div>
                     </li>
                     <li class="nav-item {% if request.resolver_match.view_name == 'website:contact' %}active{% endif %}">

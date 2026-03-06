@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}荣誉资质{% endblock %}
+
+{% block extra_css %}
+<style>
+    .inner-banner {
+        height: 650px;
+        position: relative;
+        margin-top: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .banner-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .banner-title {
+        font-size: 42px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        letter-spacing: 2px;
+        color: #003399;
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+    }
+
+    .banner-subtitle {
+        font-size: 18px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        opacity: 0;
+        color: #666;
+        animation: scaleInVisible 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes scaleInVisible {
+        0% {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 51, 153, 0.5);
+        z-index: 1;
+        display: none;
+    }
+
+    /* Certificates List Layout */
+    .cert-section {
+        padding: 80px 0;
+        background: #fff;
+    }
+
+    .cert-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+    }
+
+    .cert-card {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        transition: all 0.4s ease;
+        border: 1px solid #f0f0f0;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .cert-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 20px 40px rgba(0, 51, 153, 0.12);
+        border-color: #003399;
+    }
+
+    .cert-frame {
+        width: 100%;
+        height: 400px;
+        background: #fcfcfc;
+        border: 10px solid #fff;
+        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .cert-frame img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+        transition: transform 0.6s;
+    }
+
+    .cert-card:hover .cert-frame img {
+        transform: scale(1.05);
+    }
+
+    .cert-name {
+        font-size: 20px;
+        color: #333;
+        font-weight: 600;
+        margin-top: 15px;
+    }
+
+    .cert-decoration {
+        width: 40px;
+        height: 3px;
+        background: #003399;
+        margin: 15px auto;
+    }
+
+    @media (max-width: 992px) {
+        .cert-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .cert-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% if company.about_banner and company.about_banner.name %}
+<style>
+    .inner-banner {
+        background-image: url('{{ company.about_banner.url }}');
+        background-size: cover;
+        background-position: center;
+    }
+
+    .banner-overlay {
+        display: block;
+    }
+
+    .banner-title,
+    .banner-subtitle {
+        color: white !important;
+    }
+</style>
+{% endif %}
+
+<!-- Inner Banner -->
+<div class="inner-banner">
+    <div class="banner-overlay"></div>
+    <div class="banner-content">
+        <h1 class="banner-title">{{ slogan_cn }}</h1>
+        <p class="banner-subtitle">{{ slogan_en }}</p>
+    </div>
+</div>
+
+<section class="cert-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">荣誉资质</h2>
+            <p class="section-subtitle">HONORS AND CERTIFICATES</p>
+        </div>
+
+        <div class="cert-grid">
+            {% for cert in certificates %}
+            <div class="cert-card">
+                <div class="cert-frame">
+                    {% if cert.image and cert.image.name %}
+                    <img src="{{ cert.image.url }}" alt="{{ cert.name }}">
+                    {% else %}
+                    <i class="fa-solid fa-award" style="font-size: 100px; color: #eee;"></i>
+                    {% endif %}
+                </div>
+                <div class="cert-decoration"></div>
+                <h3 class="cert-name">{{ cert.name }}</h3>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 100px 0; color: #999;">
+                <i class="fa-solid fa-folder-open" style="font-size: 64px; margin-bottom: 20px; opacity: 0.3;"></i>
+                <p>证书正在精心整理中，敬请期待...</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

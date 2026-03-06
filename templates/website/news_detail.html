@@ -7,7 +7,7 @@
 <style>
     /* Reuse Inner Banner Style */
     .inner-banner {
-        height: 300px;
+        height: 650px;
         /* Smaller banner for detail pages */
         background-color: #003399;
         position: relative;
@@ -115,6 +115,15 @@
 {% endblock %}
 
 {% block content %}
+{% if company.news_banner and company.news_banner.name %}
+<style>
+    .inner-banner {
+        background-image: url('{{ company.news_banner.url }}');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
+{% endif %}
 <!-- Inner Banner -->
 <div class="inner-banner">
     <div class="banner-content">
